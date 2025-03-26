@@ -1,0 +1,37 @@
+{
+  "name": "brave-search-extension",
+  "version": "1.0.0",
+  "description": "A cross-browser Brave Search extension.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint build",
+    "format": "prettier --write .",
+    "package": "node build/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brave/brave-search-extension.git"
+  },
+  "author": {
+    "name": "Brave Software <support@brave.com>"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/brave/brave-search-extension/issues"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "eslint": "^9.23.0",
+    "globals": "^16.0.0",
+    "jest": "^29.7.0",
+    "jszip": "^3.10.1",
+    "prettier": "^3.5.3",
+    "strip-json-comments": "^5.0.1"
+  },
+  "overrides": {
+    "@npm/glob": "^11.0.1"
+  }
+}
