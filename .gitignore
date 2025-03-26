@@ -1,11 +1,11 @@
 # dependencies
-node_modules
+/node_modules
 
 # testing
-coverage
+/coverage
 
 # extension zips
-packages
+/packages
 
 # misc
 .DS_Store
