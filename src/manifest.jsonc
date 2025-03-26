@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "author": "Brave Software",
+  "name": "Brave Search",
+  "description": "Configures Brave Search as the default search engine.",
+  "version": "1.0.0",
+  /**
+   * Icons have been—and may continue to be—retrieved from
+   * https://github.com/alrra/browser-logos/tree/main/src/brave
+   */
+  "icons": {
+    "16": "icons/brave_16x16.png",
+    "32": "icons/brave_32x32.png",
+    "48": "icons/brave_48x48.png",
+    "64": "icons/brave_64x64.png",
+    "128": "icons/brave_128x128.png"
+  },
+  "firefox:browser_specific_settings": {
+    "gecko": {
+      /**
+       * The extension ID must either be a GUID, or a string formatted like an
+       * email address. Don't use a real email address, as it may attract spam.
+       */
+      "id": "brave-search-extension@brave.com",
+      /**
+       * https://addons.mozilla.org/api/v5/applications/firefox/ contains a
+       * list of all valid Gecko versions.
+       */
+      "strict_min_version": "136.0"
+    },
+    /**
+     * To support Firefox for Android without specifying a version range, the
+     * gecko_android subkey must be an empty object, i.e. "gecko_android": {}.
+     * Otherwise, the extension is only made available on desktop Firefox.
+     */
+    "gecko_android": {}
+  },
+  "chrome_settings_overrides": {
+    "search_provider": {
+      /**
+       * The Chrome Web Store complains if a full URL is not provided, yet
+       * Mozilla states that Manifest V3 expects a relative path.
+       * We'll compromise by providing a full URL to Chromium builds, and a
+       * relative path to Firefox builds.
+       */
+      "chromium:favicon_url": "https://cdn.search.brave.com/serp/v1/static/brand/eebf5f2ce06b0b0ee6bbd72d7e18621d4618b9663471d42463c692d019068072-brave-lion-favicon.png",
+      "firefox:favicon_url": "icons/brave_64x64.png",
+      /**
+       * We refer here to the search engine as "Brave" since both Chrome and
+       * Firefox include "Search" text proximally to the name. Chrome displays
+       * "<name> Search", meaning "Brave Search" would result in "Brave Search
+       * Search". Firefox displays "Search with <name>". We therefore use
+       * "Brave" for simplicity.
+       */
+      "name": "Brave",
+      "keyword": "brave",
+      "encoding": "UTF-8",
+      "search_url": "https://search.brave.com/search?q={searchTerms}",
+      "suggest_url": "https://search.brave.com/api/suggest?q={searchTerms}",
+      "is_default": true
+    }
+  }
+}
