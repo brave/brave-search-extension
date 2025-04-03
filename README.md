@@ -2,6 +2,11 @@
 
 This repository contains the source code for the Brave Search browser extension. The extension integrates Brave Search into your browser, providing a seamless and private search experience.
 
+The extension is availble from:
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/brave-search/imoinfjmpciaeboldbfaakmmjkijkeff)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/bravesearch/)
+
 ## Project Structure
 
 #### `/build` directory
