@@ -6,6 +6,7 @@ The extension is availble from:
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/brave-search/imoinfjmpciaeboldbfaakmmjkijkeff)
 - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/bravesearch/)
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/brave-search/bjpekkhcepneihdjkpoenkejgaalgaae)
 
 ## Project Structure
 
