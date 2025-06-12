@@ -3,7 +3,7 @@
   "author": "Brave Software",
   "name": "Brave Search (official) - Private Search Engine",
   "description": "Configures Brave Search as the default search engine.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   /**
    * Icons have been—and may continue to be—retrieved from
    * https://github.com/alrra/browser-logos/tree/main/src/brave
