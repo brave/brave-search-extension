@@ -1,7 +1,15 @@
 {
   "manifest_version": 3,
   "author": "Brave Software",
-  "name": "Brave Search (official) - Private Search Engine",
+  /**
+   * Firefox's addons.mozilla.org requires a name that is no more than 45
+   * characters in length. Further, it permits the maintainer of the extension
+   * to provide an edited name after upload. The Chrome Web Store derives its
+   * listing directly from the extension manifest itself, and limits the name
+   * to 75 characters. For this reason we maintain two distinct names.
+   */
+  "firefox:name": "Brave Search",
+  "chromium:name": "Brave Search (official) - Private Search Engine",
   "description": "Configures Brave Search as the default search engine.",
   "version": "1.0.2",
   /**
