@@ -40,11 +40,11 @@ jobs:
       - name: Upload Chromium extension
         uses: actions/upload-artifact@v4
         with:
-          name: chromium-extension
+          name: chromium-extension.zip
           path: packages/chromium.zip
 
       - name: Upload Firefox extension
         uses: actions/upload-artifact@v4
         with:
-          name: firefox-extension
+          name: firefox-extension.zip
           path: packages/firefox.zip 
