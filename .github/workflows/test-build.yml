@@ -1,33 +1,57 @@
+# Test Build Workflow
+#
+# This workflow validates the extension code quality and build process on pull requests.
+# It performs the following steps:
+# 1. Sets up the development environment (Node.js 22.x)
+# 2. Installs project dependencies
+# 3. Runs code quality checks (linting and testing)
+# 4. Tests the build process to ensure packages can be created
+# 5. Verifies that build artifacts are generated correctly
+# 6. Uploads the built extension packages as artifacts for review
+#
+# Triggered on: Manual dispatch and pull requests to main/master branches
+
 name: Test Build
 
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test-build:
     runs-on: ubuntu-latest
 
+    # Set environment variables for better maintainability
+    env:
+      NODE_VERSION: '22.x'
+
     steps:
+      # Checkout the repository code at the current commit
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      # Set up Node.js environment with version 22.x for building the extension
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '22.x'
+          node-version: ${{ env.NODE_VERSION }}
 
+      # Install all project dependencies using npm ci for reproducible builds
       - name: Install dependencies
         run: npm ci
 
+      # Run ESLint/Prettier to check code quality and formatting standards
       - name: Run linting
         run: npm run lint
 
+      # Execute the test suite to ensure all functionality works correctly
       - name: Run tests
         run: npm test
 
+      # Build the extension packages for both Chromium and Firefox
       - name: Test build process
         run: npm run package
 
+      # Verify that the build process created the expected output files
       - name: Verify build artifacts
         run: |
           echo "Checking if extension packages were created..."
@@ -37,12 +61,14 @@ jobs:
           echo "Firefox package:"
           ls -la packages/firefox/
 
+      # Upload the Chromium extension package as a downloadable artifact
       - name: Upload Chromium Extension
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: chromium
           path: packages/chromium
 
+      # Upload the Firefox extension package as a downloadable artifact
       - name: Upload Firefox Extension
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
