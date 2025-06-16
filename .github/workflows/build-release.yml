@@ -1,0 +1,100 @@
+# Build Release Workflow
+#
+# This workflow creates a new release of the browser extension with automated versioning.
+# It performs the following steps:
+# 1. Sets up the development environment (Node.js 22.x)
+# 2. Configures Git for automated commits by the GitHub Actions bot
+# 3. Installs dependencies and runs quality checks (linting and testing)
+# 4. Automatically bumps the patch version (e.g., 1.0.0 -> 1.0.1)
+# 5. Builds the extension packages for distribution
+# 6. Commits the version changes and build artifacts back to the repository
+# 7. Creates a GitHub release with the new version tag and attaches the built packages
+#
+# Triggered on: Manual dispatch only (for controlled releases)
+# Requires: Write permissions to repository contents for committing and releasing
+
+name: Build Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-extension:
+    runs-on: ubuntu-latest
+
+    # Set environment variables for better maintainability
+    env:
+      NODE_VERSION: '22.x'
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+      # Checkout the repository code, using the head ref to ensure we're on the right branch
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+
+      # Set up Node.js environment with version 22.x for building the extension
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Configure Git user information for automated commits by GitHub Actions
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Install all project dependencies using npm ci for reproducible builds
+      - name: Install dependencies
+        run: npm ci
+
+      # Run ESLint/Prettier to ensure code quality before release
+      - name: Run linting
+        run: npm run lint
+
+      # Execute the test suite to ensure all functionality works before release
+      - name: Run tests
+        run: npm test
+
+      # Automatically increment the patch version and capture the new version number
+      - name: Bump patch version
+        id: bump-version
+        run: |
+          VERSION=$(npm version patch --no-git-tag-version)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      # Build the extension packages for both Chromium and Firefox
+      - name: Build extension packages
+        run: npm run package
+
+      # Verify build artifacts exist before proceeding with release
+      - name: Verify build artifacts
+        run: |
+          echo "Verifying extension packages were created..."
+          if [ ! -f packages/*.zip ]; then
+            echo "Error: No zip files found in packages directory"
+            exit 1
+          fi
+          ls -la packages/
+          echo "Build verification complete"
+
+      # Commit the version changes and built packages back to the repository
+      - name: Commit version bump and build assets
+        run: |
+          git add package.json package-lock.json
+          git commit -m "ci: release ${{ steps.bump-version.outputs.version }}"
+          git push
+
+      # Create a new GitHub release with the version tag and attach the built packages
+      - name: Create release
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
+        with:
+          tag_name: ${{ steps.bump-version.outputs.version }}
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            packages/*.zip
