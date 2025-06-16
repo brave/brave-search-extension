@@ -1,0 +1,44 @@
+name: Test Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Test build process
+        run: npm run package
+
+      - name: Verify build artifacts
+        run: |
+          echo "Checking if extension packages were created..."
+          ls -la packages/
+          echo "Chromium package:"
+          ls -la packages/chromium/
+          echo "Firefox package:"
+          ls -la packages/firefox/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-packages
+          path: packages/*.zip 
