@@ -37,14 +37,14 @@ jobs:
           echo "Firefox package:"
           ls -la packages/firefox/
 
-      - name: Upload Chromium extension
+      - name: Upload Chromium Extension
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: chromium-extension
+          name: chromium
           path: packages/chromium
 
-      - name: Upload Firefox extension
+      - name: Upload Firefox Extension
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: firefox-extension
+          name: firefox
           path: packages/firefox
