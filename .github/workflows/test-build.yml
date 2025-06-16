@@ -37,8 +37,14 @@ jobs:
           echo "Firefox package:"
           ls -la packages/firefox/
 
-      - name: Upload build artifacts
+      - name: Upload Chromium extension
         uses: actions/upload-artifact@v4
         with:
-          name: extension-packages
-          path: packages/*.zip 
+          name: chromium-extension
+          path: packages/chromium.zip
+
+      - name: Upload Firefox extension
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-extension
+          path: packages/firefox.zip 
