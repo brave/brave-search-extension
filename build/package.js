@@ -26,15 +26,36 @@ const BASE_MANIFEST_PATH = path.join(
   'manifest.jsonc',
 );
 
+// path to package.json
+const PACKAGE_JSON_PATH = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'package.json',
+);
+
 export default async function main() {
   // Create the package directory exists and is empty
   await fs.rm(PACKAGE_DIRECTORY, { recursive: true, force: true });
   await fs.mkdir(PACKAGE_DIRECTORY, { recursive: true });
 
+  // Read version from package.json
+  const packageJsonContent = await fs.readFile(PACKAGE_JSON_PATH, 'utf-8');
+  const packageJson = JSON.parse(packageJsonContent);
+  const version = packageJson.version;
+
+  if (!version) {
+    throw new Error('No version found in package.json');
+  }
+
+  console.log(`Building extension version ${version} from package.json`);
+
   // Get the base manifest without comments
   const basePath = path.dirname(BASE_MANIFEST_PATH);
   const baseManifest = await fs.readFile(BASE_MANIFEST_PATH, 'utf-8');
   const parsedBaseManifest = JSON.parse(stripJSONComments(baseManifest));
+
+  // Inject version from package.json into the manifest
+  parsedBaseManifest.version = version;
 
   // Generate all browser-specific extensions
   for (const browser of kBrowsers) {
@@ -66,6 +87,8 @@ export default async function main() {
       await zip.generateAsync({ type: 'nodebuffer' }),
     );
   }
+
+  console.log(`Successfully built extension packages for version ${version}`);
 }
 
 function getManifestResources(manifest) {

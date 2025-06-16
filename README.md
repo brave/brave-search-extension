@@ -16,4 +16,4 @@ Contains various scripts for the purpose of constructing browser-specific extens
 
 #### `/src` directory
 
-Source for the browser extension. This is presently only a manifest.jsonc file (and icons), which serves as the base/template for the browser-specific manifest files generated during the _packaging_ process.
+Source for the browser extension. This is presently only a manifest.jsonc file (and icons), which serves as the base/template for the browser-specific manifest files generated during the _packaging_ process. The version number for the extension is derived from the package.json file.

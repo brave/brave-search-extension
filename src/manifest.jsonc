@@ -11,7 +11,10 @@
   "firefox:name": "Brave Search",
   "chromium:name": "Brave Search (official) - Private Search Engine",
   "description": "Configures Brave Search as the default search engine.",
-  "version": "1.0.2",
+  /**
+   * Version is automatically injected from package.json during the build process.
+   * Do not manually set the version here - update package.json instead.
+   */
   /**
    * Icons have been—and may continue to be—retrieved from
    * https://github.com/alrra/browser-logos/tree/main/src/brave
