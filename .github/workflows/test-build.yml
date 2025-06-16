@@ -38,13 +38,13 @@ jobs:
           ls -la packages/firefox/
 
       - name: Upload Chromium extension
-        uses: actions/upload-artifact@ea165f8dd755a8aa30e59e8df8e4d82df6a7e8aa # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: chromium-extension.zip
           path: packages/chromium.zip
 
       - name: Upload Firefox extension
-        uses: actions/upload-artifact@ea165f8dd755a8aa30e59e8df8e4d82df6a7e8aa # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: firefox-extension.zip
           path: packages/firefox.zip 
