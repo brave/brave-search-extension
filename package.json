@@ -1,6 +1,6 @@
 {
   "name": "brave-search-extension",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A cross-browser Brave Search extension.",
   "main": "index.js",
   "type": "module",

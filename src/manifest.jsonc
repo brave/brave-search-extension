@@ -64,7 +64,7 @@
        * "Brave" for simplicity.
        */
       "name": "Brave",
-      "keyword": "brave",
+      "keyword": "@brave",
       "encoding": "UTF-8",
       "search_url": "https://search.brave.com/search?q={searchTerms}",
       "suggest_url": "https://search.brave.com/api/suggest?q={searchTerms}",
