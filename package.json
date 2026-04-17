@@ -28,7 +28,7 @@
     "globals": "17.4.0",
     "jest": "30.3.0",
     "jszip": "3.10.1",
-    "prettier": "3.8.1",
+    "prettier": "3.8.2",
     "strip-json-comments": "5.0.3"
   },
   "overrides": {
