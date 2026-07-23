@@ -9,32 +9,27 @@ import stripJSONComments from 'strip-json-comments';
 
 // local dependencies
 import { filterKeys } from './utils.js';
-import { kBrowsers, kCopyableResourceExtensions } from './common.js';
+import { kBrowsers } from './common.js';
+
+// Runtime file types under src/newtab to bundle. Excludes things like
+// design-reference screenshots that live alongside the source for
+// convenience but shouldn't ship in the packaged extension.
+const ntpAssetTypes = ['.html', '.css', '.js', '.svg'];
+
+// get the directory name of the current file
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // path to the package directory
-const PACKAGE_DIRECTORY = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-  'packages',
-);
+const PACKAGE_DIRECTORY = path.join(dirname, '..', 'packages');
 
 // path to the base manifest
-const BASE_MANIFEST_PATH = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-  'src',
-  'manifest.jsonc',
-);
+const BASE_MANIFEST_PATH = path.join(dirname, '..', 'src', 'manifest.jsonc');
 
 // path to package.json
-const PACKAGE_JSON_PATH = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-  'package.json',
-);
+const PACKAGE_JSON_PATH = path.join(dirname, '..', 'package.json');
 
 export default async function main() {
-  // Create the package directory exists and is empty
+  // Ensure the package directory exists and is empty
   await fs.rm(PACKAGE_DIRECTORY, { recursive: true, force: true });
   await fs.mkdir(PACKAGE_DIRECTORY, { recursive: true });
 
@@ -60,86 +55,88 @@ export default async function main() {
   // Generate all browser-specific extensions
   for (const browser of kBrowsers) {
     // Build the browser extension directory
-    const extDirectory = await fs.mkdir(path.join(PACKAGE_DIRECTORY, browser), {
-      recursive: true,
-    });
+    const browserDirectory = path.join(PACKAGE_DIRECTORY, browser);
+    await fs.mkdir(browserDirectory, { recursive: true });
 
     // Build the browser manifest from the base manifest
-    const manifest = await filterKeys(parsedBaseManifest, browser);
-    const manifestPath = path.join(extDirectory, 'manifest.json');
-    const manifestString = JSON.stringify(manifest, null, 4);
+    const manifest = filterKeys(parsedBaseManifest, browser);
+    const manifestPath = path.join(browserDirectory, 'manifest.json');
+    const manifestContent = JSON.stringify(manifest, null, 4);
 
     // Write the manifest to the extension directory and copy resources
-    await fs.writeFile(manifestPath, manifestString);
-    await copyManifestResourcesToDestination(manifest, basePath, extDirectory);
+    await fs.writeFile(manifestPath, manifestContent);
+    await copyExtensionResources(basePath, browserDirectory);
 
-    // Create the zip file
-    const zip = new JSZip();
-    const zipName = `${browser}.zip`;
+    // Create the archive
+    const archive = new JSZip();
+    const archivePath = path.join(PACKAGE_DIRECTORY, `${browser}.zip`);
 
-    // Add the manifest and resources to the zip file
-    zip.file('manifest.json', manifestString);
-    await copyManifestResourcesToDestination(manifest, basePath, zip);
+    // Add the manifest and resources to the archive
+    archive.file('manifest.json', manifestContent);
+    await copyExtensionResources(basePath, archive);
 
-    // Write the zip file to disk
-    await fs.writeFile(
-      path.join(PACKAGE_DIRECTORY, zipName),
-      await zip.generateAsync({ type: 'nodebuffer' }),
-    );
+    // Write the archive to disk
+    const archiveContent = await archive.generateAsync({ type: 'nodebuffer' });
+    await fs.writeFile(archivePath, archiveContent);
   }
 
   console.log(`Successfully built extension packages for version ${version}`);
 }
 
-function getManifestResources(manifest) {
-  const resources = [];
-
-  for (const value of Object.values(manifest)) {
-    if (typeof value === 'string' && isRelativeResourcePath(value)) {
-      resources.push(value);
-    } else if (typeof value === 'object') {
-      resources.push(...getManifestResources(value));
-    }
-  }
-
-  return resources;
-}
-
-function isRelativeResourcePath(value) {
-  // Don't include URLs to otherwise copyable resource types.
-  if (['http:', 'https:'].some((protocol) => value.startsWith(protocol))) {
-    return false;
-  }
-
-  // Try to determine if the value is a resource path of some sort.
-  return kCopyableResourceExtensions.some((ext) => value.endsWith(ext));
+async function copyExtensionResources(source, destination) {
+  const dirs = ['icons', 'newtab', '_locales'];
+  await copyDirectory(path.join(source, 'icons'), 'icons', destination);
+  await copyDirectory(
+    path.join(source, 'newtab'),
+    'newtab',
+    destination,
+    ntpAssetTypes,
+  );
+  await copyDirectory(path.join(source, '_locales'), '_locales', destination, [
+    '.json',
+  ]);
 }
 
 /**
- * Copies manifest resources to the specified destination.
+ * Recursively copies files in a directory to the specified destination.
+ * Used for the asset directories (icons, newtab, _locales) that make up
+ * everything a packaged extension needs beyond manifest.json itself.
  *
- * @param {Object} manifest - The manifest object containing resource information.
- * @param {string} sourceDir - The source directory where the resources are located.
+ * @param {string} sourceDir - The directory to copy files from.
+ * @param {string} destPrefix - The path prefix to use at the destination.
  * @param {JSZip|string} destEntity - The destination entity, which can be a JSZip instance or a directory path.
- * @returns {Promise<void>} A promise that resolves when the resources have been copied.
+ * @param {string[]|null} [extensions] - If provided, only files ending in one of these extensions are copied (e.g. to exclude design-reference images that live alongside runtime files but shouldn't ship).
+ * @returns {Promise<void>} A promise that resolves when the files have been copied.
  */
-async function copyManifestResourcesToDestination(
-  manifest,
+async function copyDirectory(
   sourceDir,
+  destPrefix,
   destEntity,
+  extensions = null,
 ) {
-  // We may be adding to a JSZip file, or a directory.
-  for (const resourcePath of getManifestResources(manifest)) {
-    const source = path.join(sourceDir, resourcePath);
+  const entries = await fs.readdir(sourceDir, { withFileTypes: true });
 
-    // Maybe write to the zip file
-    if (destEntity instanceof JSZip) {
-      const normalizedPath = resourcePath.replace(/\\/g, '/');
-      destEntity.file(normalizedPath, await fs.readFile(source));
+  for (const entry of entries) {
+    const source = path.join(sourceDir, entry.name);
+    const resourcePath = path.join(destPrefix, entry.name);
+
+    if (entry.isDirectory()) {
+      await copyDirectory(source, resourcePath, destEntity, extensions);
       continue;
     }
 
-    // Make sure the destination directory exists
+    if (!entry.isFile()) continue;
+    if (extensions && !extensions.some((ext) => entry.name.endsWith(ext)))
+      continue;
+
+    if (destEntity instanceof JSZip) {
+      destEntity.file(
+        resourcePath.replace(/\\/g, '/'),
+        await fs.readFile(source),
+      );
+      continue;
+    }
+
     const destination = path.join(destEntity, resourcePath);
     await fs.mkdir(path.dirname(destination), { recursive: true });
     await fs.copyFile(source, destination);
