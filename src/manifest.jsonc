@@ -70,8 +70,8 @@
       "name": "Brave",
       "keyword": "@brave",
       "encoding": "UTF-8",
-      "search_url": "https://search.brave.com/search?q={searchTerms}",
-      "suggest_url": "https://search.brave.com/api/suggest?q={searchTerms}",
+      "search_url": "https://search.brave.com/search?q={searchTerms}&source=csChrome",
+      "suggest_url": "https://search.brave.com/api/suggest?q={searchTerms}&source=csChrome",
       "is_default": true,
       "chromium:prepopulated_id": 109
     }
