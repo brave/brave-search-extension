@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483647;
+  visibility: hidden;
+}
+
+:host([open]) {
+  visibility: visible;
+}
+
+.menu {
+  min-width: 220px;
+  padding: 6px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: white;
+  color: #212121;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background: #26262e;
+    color: #f0f0f5;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-item:hover {
+  background: rgba(128, 128, 128, 0.12);
+}
+
+.menu-item input[type='checkbox'] {
+  margin: 0;
+}
