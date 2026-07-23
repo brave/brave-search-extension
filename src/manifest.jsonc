@@ -11,6 +11,7 @@
   "firefox:name": "Brave Search",
   "chromium:name": "Brave Search (official) - Private Search Engine",
   "description": "Configures Brave Search as the default search engine.",
+  "default_locale": "en_US",
   /**
    * Version is automatically injected from package.json during the build process.
    * Do not manually set the version here - update package.json instead.
