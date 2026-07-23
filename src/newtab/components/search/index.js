@@ -3,6 +3,10 @@ import styles from './styles.css' with { type: 'css' };
 import { replaceDataI18nAttributes } from '../utils.js';
 import { preferences } from '../preferences.js';
 
+const EXT_SOURCE = 'extension-ntp'; // Identifies the source of the search traffic
+const SEARCH_URL = 'https://search.brave.com/search';
+const ASK_AI_URL = 'https://search.brave.com/ask';
+
 class SearchBox extends HTMLElement {
   static get observedAttributes() {
     return ['ai-enabled'];
@@ -30,9 +34,9 @@ class SearchBox extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <img class="logo logo-light" src="../icons/brave-logo-light.svg" data-i18n='{ "key": "searchLogoAlt", "where": "alt" }' alt="" />
       <img class="logo logo-dark" src="../icons/brave-logo-dark.svg" data-i18n='{ "key": "searchLogoAlt", "where": "alt" }' alt="" />
-      <form action="https://search.brave.com/search" method="GET">
+      <form action="${SEARCH_URL}" method="GET">
         <input type="search" data-i18n='{ "key": "searchPlaceholder", "where": "placeholder, aria-label" }' name="q" autofocus autocomplete="off" />
-        <input type="hidden" name="source" value="brave-search-extension" />
+        <input type="hidden" name="source" value="${EXT_SOURCE}" />
       </form>
     `;
 
@@ -43,9 +47,9 @@ class SearchBox extends HTMLElement {
       const query = this.shadowRoot.querySelector('input[name="q"]').value;
       const params = new URLSearchParams({
         q: query,
-        source: 'brave-search-extension',
+        source: EXT_SOURCE,
       });
-      location.href = `https://search.brave.com/ask?${params.toString()}`;
+      location.href = `${ASK_AI_URL}?${params.toString()}`;
     });
 
     this.updateAskAi();
