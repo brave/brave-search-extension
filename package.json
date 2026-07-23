@@ -4,6 +4,9 @@
   "description": "A cross-browser Brave Search extension.",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "lint": "eslint build",
     "format": "prettier --write .",
