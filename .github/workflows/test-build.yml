@@ -2,7 +2,7 @@
 #
 # This workflow validates the extension code quality and build process on pull requests.
 # It performs the following steps:
-# 1. Sets up the development environment (Node.js 22.x)
+# 1. Sets up the development environment (Node.js 24.x)
 # 2. Installs project dependencies
 # 3. Runs code quality checks (linting and testing)
 # 4. Tests the build process to ensure packages can be created
@@ -27,13 +27,13 @@ jobs:
 
     # Set environment variables for better maintainability
     env:
-      NODE_VERSION: '22.x'
+      NODE_VERSION: '24.x'
 
     steps:
       # Checkout the repository code at the current commit
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
-      # Set up Node.js environment with version 22.x for building the extension
+      # Set up Node.js environment with version 24.x for building the extension
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
