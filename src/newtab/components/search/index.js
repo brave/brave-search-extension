@@ -1,7 +1,8 @@
 import '../ask-ai/index.js';
-import styles from './styles.css' with { type: 'css' };
-import { replaceDataI18nAttributes } from '../utils.js';
+import { loadStyleSheet, replaceDataI18nAttributes } from '../utils.js';
 import { preferences } from '../preferences.js';
+
+const styles = await loadStyleSheet(new URL('./styles.css', import.meta.url));
 
 const EXT_SOURCE = 'extension-ntp'; // Identifies the source of the search traffic
 const SEARCH_URL = 'https://search.brave.com/search';

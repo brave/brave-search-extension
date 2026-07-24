@@ -1,5 +1,6 @@
-import styles from './styles.css' with { type: 'css' };
-import { replaceDataI18nAttributes } from '../utils.js';
+import { loadStyleSheet, replaceDataI18nAttributes } from '../utils.js';
+
+const styles = await loadStyleSheet(new URL('./styles.css', import.meta.url));
 
 class AskButton extends HTMLElement {
   constructor() {

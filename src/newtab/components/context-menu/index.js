@@ -1,6 +1,7 @@
-import styles from './styles.css' with { type: 'css' };
-import { replaceDataI18nAttributes } from '../utils.js';
+import { loadStyleSheet, replaceDataI18nAttributes } from '../utils.js';
 import { preferences } from '../preferences.js';
+
+const styles = await loadStyleSheet(new URL('./styles.css', import.meta.url));
 
 class ContextMenu extends HTMLElement {
   constructor() {
