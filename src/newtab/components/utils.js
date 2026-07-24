@@ -28,12 +28,12 @@ export function loadStyleSheet(url) {
 /**
  * Finds all elements with a [data-i18n] attribute. The content of this
  * attribute is then parsed as JSON, expecting the following schema:
- *  { key: string, where: 'text' | string[] }
+ *  { key: string, where: string }
  *
  * The 'key' value is used to lookup the message, and 'where' is used to
- * determine where it should be placed. If the 'where' value is a list of
- * strings, it will be split on commas and trimmed. Each string in the list
- * will be evaluated as either text, or an attribute name.
+ * determine where it should be placed. 'where' is a single placement, or
+ * multiple comma-separated placements (e.g. "text" or "placeholder,
+ * aria-label"), each evaluated as either text, or an attribute name.
  */
 export function replaceDataI18nAttributes(element) {
   const elements = element.querySelectorAll('[data-i18n]');
