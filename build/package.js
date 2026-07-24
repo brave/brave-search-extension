@@ -84,7 +84,6 @@ export default async function main() {
 }
 
 async function copyExtensionResources(source, destination) {
-  const dirs = ['icons', 'newtab', '_locales'];
   await copyDirectory(path.join(source, 'icons'), 'icons', destination);
   await copyDirectory(
     path.join(source, 'newtab'),
