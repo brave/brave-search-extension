@@ -32,10 +32,8 @@ export function filterKeys(obj, prefix) {
       [kPrefix, kBase] = parts;
     }
 
-    // Skip if the prefix is a browser but doesn't match the desired one
-    if (kPrefix && kBrowsers.includes(kPrefix.toLowerCase())) {
-      if (kPrefix.toLowerCase() !== normalizedPrefix) continue;
-    }
+    // Skip if the key had a browser prefix that doesn't match the desired one
+    if (kPrefix && kPrefix.toLowerCase() !== normalizedPrefix) continue;
 
     result[kBase] = filterValue(value, prefix);
   }
