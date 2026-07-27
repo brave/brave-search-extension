@@ -1,0 +1,25 @@
+.ask-ai-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--brave-ghost-border);
+  color: var(--brave-ghost-color);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ask-ai-button:hover {
+  background: var(--brave-ghost-hover);
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}

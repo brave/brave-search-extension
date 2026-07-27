@@ -1,0 +1,42 @@
+{
+  "pageTitle": {
+    "message": "Brave Search",
+    "description": "Title of the New Tab page's browser tab"
+  },
+  "searchLogoAlt": {
+    "message": "Brave Search",
+    "description": "Alt text for the Brave Search logo on the New Tab page"
+  },
+  "searchPlaceholder": {
+    "message": "Ask anything, find anything…",
+    "description": "Placeholder text for the New Tab page search input"
+  },
+  "askAiButtonLabel": {
+    "message": "Ask",
+    "description": "Label for the button that opens Brave's AI answer experience"
+  },
+  "ctaLogoAlt": {
+    "message": "Brave logo",
+    "description": "Alt text for the Brave logo in the browser download callout"
+  },
+  "ctaTitle": {
+    "message": "Brave Browser",
+    "description": "Title of the callout suggesting the user download Brave Browser"
+  },
+  "ctaSubtitle": {
+    "message": "Enjoying private search? Try the browser that puts you first.",
+    "description": "Subtitle of the callout suggesting the user download Brave Browser"
+  },
+  "downloadButtonLabel": {
+    "message": "Download",
+    "description": "Label for the button that links to the Brave Browser download page"
+  },
+  "contextMenuAskAiOption": {
+    "message": "Ask AI button",
+    "description": "Checkbox menu item toggling whether the Ask AI button is shown"
+  },
+  "contextMenuDownloadOption": {
+    "message": "Download offer",
+    "description": "Checkbox menu item toggling whether the Brave Browser download callout is shown"
+  }
+}

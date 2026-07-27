@@ -1,0 +1,44 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 12px 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: rgba(128, 128, 128, 0.08);
+  border: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    background: #1c1c22;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.cta-logo {
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.cta-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.cta-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cta-subtitle {
+  font-size: 12px;
+  opacity: 0.65;
+}

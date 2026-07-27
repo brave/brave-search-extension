@@ -1,0 +1,63 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 32px;
+}
+
+.logo-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logo-light {
+    display: none;
+  }
+
+  .logo-dark {
+    display: block;
+  }
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 0 24px;
+  box-sizing: border-box;
+  padding: 6px 9px 6px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  form {
+    background: #26262e;
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+form:focus-within {
+  border-color: #ff4000;
+}
+
+input[type='search'] {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  font-size: 16px;
+  font-family: inherit;
+  border: none;
+  background: transparent;
+  color: inherit;
+  outline: none;
+}
