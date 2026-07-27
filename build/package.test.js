@@ -149,11 +149,13 @@ describe('copyExtensionResources', () => {
 });
 
 describe('main (packaging integration)', () => {
-  test('builds a manifest and archive for each configured browser', async () => {
+  test('builds a manifest and archive for each configured browser', async (t) => {
     const packageJson = JSON.parse(
       await fs.readFile(path.join(PROJECT_ROOT, 'package.json'), 'utf-8'),
     );
     const packageDirectory = path.join(PROJECT_ROOT, 'packages');
+
+    t.after(() => fs.rm(packageDirectory, { recursive: true, force: true }));
 
     await main();
 
