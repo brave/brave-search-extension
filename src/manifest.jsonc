@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
-  "author": "Brave Software",
   /**
    * AMO caps names at 45 characters (and lets us edit the listing name after
    * upload); the Chrome Web Store reads the name straight from the manifest
    * and caps it at 75. Hence two names.
    */
   "firefox:name": "Brave Search",
+  "firefox:developer": {
+    "name": "Brave Software",
+    "url": "https://brave.com/"
+  },
   "chromium:name": "Brave Search (official) - Private Search Engine",
   "description": "Configures Brave Search as the default search engine.",
   "default_locale": "en_US",
@@ -14,6 +17,7 @@
    * Version is automatically injected from package.json during the build process.
    * Do not manually set the version here - update package.json instead.
    */
+  "version": "INJECTED.AT.BUILD.TIME",
   /**
    * Icons have been—and may continue to be—retrieved from
    * https://github.com/alrra/browser-logos/tree/main/src/brave
