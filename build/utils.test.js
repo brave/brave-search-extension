@@ -1,5 +1,6 @@
+import { test, describe } from 'node:test';
+import assert from 'node:assert/strict';
 import { filterKeys } from './utils.js';
-import { test, describe, expect } from '@jest/globals';
 
 describe('filterKeys (real kBrowsers)', () => {
   const sampleInput = {
@@ -20,7 +21,7 @@ describe('filterKeys (real kBrowsers)', () => {
   test('includes only firefox-specific keys for firefox', () => {
     const result = filterKeys(sampleInput, 'firefox');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       browser_specific_settings: {
@@ -36,7 +37,7 @@ describe('filterKeys (real kBrowsers)', () => {
   test('includes only chromium-specific keys for chromium', () => {
     const result = filterKeys(sampleInput, 'chromium');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       externally_connectable: {
@@ -50,11 +51,75 @@ describe('filterKeys (real kBrowsers)', () => {
   test('excludes all browser-prefixed keys if prefix is unknown', () => {
     const result = filterKeys(sampleInput, 'opera');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       'tests:internal_key': 'should not be removed',
       permissions: ['storage'],
+    });
+  });
+
+  test('is case-insensitive when matching the requested prefix', () => {
+    const result = filterKeys(sampleInput, 'FIREFOX');
+
+    assert.deepStrictEqual(result, {
+      name: 'My Extension',
+      version: '1.0.0',
+      browser_specific_settings: {
+        gecko: {
+          id: 'addon@example.com',
+        },
+      },
+      'tests:internal_key': 'should not be removed',
+      permissions: ['storage'],
+    });
+  });
+});
+
+describe('filterKeys (nested and array values)', () => {
+  // Mirrors the real manifest shape, where a plain (unprefixed) object
+  // contains browser-prefixed leaf keys - e.g. chrome_settings_overrides.
+  const nestedInput = {
+    search_provider: {
+      'chromium:favicon_url': 'https://example.com/chromium-icon.png',
+      'firefox:favicon_url': 'icons/firefox-icon.png',
+      name: 'Example',
+    },
+  };
+
+  test('recursively filters prefixed keys nested inside a plain object', () => {
+    const result = filterKeys(nestedInput, 'firefox');
+
+    assert.deepStrictEqual(result, {
+      search_provider: {
+        favicon_url: 'icons/firefox-icon.png',
+        name: 'Example',
+      },
+    });
+  });
+
+  test('recursively filters prefixed keys on objects nested inside arrays', () => {
+    const arrayInput = {
+      engines: [
+        {
+          'chromium:favicon_url': 'https://example.com/chromium-icon.png',
+          'firefox:favicon_url': 'icons/firefox-icon.png',
+          name: 'Example',
+        },
+        'plain string entry',
+      ],
+    };
+
+    const result = filterKeys(arrayInput, 'chromium');
+
+    assert.deepStrictEqual(result, {
+      engines: [
+        {
+          favicon_url: 'https://example.com/chromium-icon.png',
+          name: 'Example',
+        },
+        'plain string entry',
+      ],
     });
   });
 });

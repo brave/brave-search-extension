@@ -14,7 +14,7 @@ import { kBrowsers } from './common.js';
 // Runtime file types under src/newtab to bundle. Excludes things like
 // design-reference screenshots that live alongside the source for
 // convenience but shouldn't ship in the packaged extension.
-const ntpAssetTypes = ['.html', '.css', '.js', '.svg'];
+export const ntpAssetTypes = ['.html', '.css', '.js', '.svg'];
 
 // get the directory name of the current file
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -83,7 +83,7 @@ export default async function main() {
   console.log(`Successfully built extension packages for version ${version}`);
 }
 
-async function copyExtensionResources(source, destination) {
+export async function copyExtensionResources(source, destination) {
   await copyDirectory(path.join(source, 'icons'), 'icons', destination);
   await copyDirectory(
     path.join(source, 'newtab'),
@@ -107,7 +107,7 @@ async function copyExtensionResources(source, destination) {
  * @param {string[]|null} [extensions] - If provided, only files ending in one of these extensions are copied (e.g. to exclude design-reference images that live alongside runtime files but shouldn't ship).
  * @returns {Promise<void>} A promise that resolves when the files have been copied.
  */
-async function copyDirectory(
+export async function copyDirectory(
   sourceDir,
   destPrefix,
   destEntity,

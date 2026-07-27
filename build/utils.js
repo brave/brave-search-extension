@@ -1,7 +1,13 @@
 import { kBrowsers } from './common.js';
 
+function isPlainObject(value) {
+  return value && Object.getPrototypeOf(value) === Object.prototype;
+}
+
 /**
  * Recursively filters an object, giving consideration to prefixes if they exist.
+ * Plain objects nested inside arrays are also filtered, so a prefixed key can
+ * appear at any depth, not just directly under another object.
  *
  * @param {Object} obj - The object to filter.
  * @param {string} prefix - Which prefixed properties to include.
@@ -26,18 +32,31 @@ export function filterKeys(obj, prefix) {
       [kPrefix, kBase] = parts;
     }
 
-    // Skip if the prefix is a browser but doesn't match the desired one
-    if (kPrefix && kBrowsers.includes(kPrefix.toLowerCase())) {
-      if (kPrefix.toLowerCase() !== normalizedPrefix) continue;
-    }
+    // Skip if the key had a browser prefix that doesn't match the desired one
+    if (kPrefix && kPrefix.toLowerCase() !== normalizedPrefix) continue;
 
-    // Recursively process plain objects
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      result[kBase] = filterKeys(value, prefix);
-    } else {
-      result[kBase] = value;
-    }
+    result[kBase] = filterValue(value, prefix);
   }
 
   return result;
+}
+
+/**
+ * Applies filterKeys to plain objects, recurses into arrays to reach any
+ * objects they contain, and passes everything else through unchanged.
+ *
+ * @param {*} value - The value to filter.
+ * @param {string} prefix - Which prefixed properties to include.
+ * @returns {*} The filtered value.
+ */
+function filterValue(value, prefix) {
+  if (Array.isArray(value)) {
+    return value.map((item) => filterValue(item, prefix));
+  }
+
+  if (isPlainObject(value)) {
+    return filterKeys(value, prefix);
+  }
+
+  return value;
 }

@@ -11,7 +11,7 @@
     "lint": "eslint build",
     "format": "prettier --write .",
     "package": "node build/index.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+    "test": "node --test --experimental-test-coverage"
   },
   "keywords": [],
   "repository": {
@@ -29,7 +29,6 @@
     "@eslint/js": "10.0.1",
     "eslint": "10.1.0",
     "globals": "17.4.0",
-    "jest": "30.3.0",
     "jszip": "3.10.1",
     "prettier": "3.8.1",
     "strip-json-comments": "5.0.3"
