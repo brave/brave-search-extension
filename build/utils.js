@@ -1,5 +1,9 @@
 import { kBrowsers } from './common.js';
 
+function isPlainObject(value) {
+  return value && Object.getPrototypeOf(value) === Object.prototype;
+}
+
 /**
  * Recursively filters an object, giving consideration to prefixes if they exist.
  * Plain objects nested inside arrays are also filtered, so a prefixed key can
@@ -52,7 +56,7 @@ function filterValue(value, prefix) {
     return value.map((item) => filterValue(item, prefix));
   }
 
-  if (value && typeof value === 'object') {
+  if (isPlainObject(value)) {
     return filterKeys(value, prefix);
   }
 
