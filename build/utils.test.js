@@ -1,5 +1,6 @@
+import { test, describe } from 'node:test';
+import assert from 'node:assert/strict';
 import { filterKeys } from './utils.js';
-import { test, describe, expect } from '@jest/globals';
 
 describe('filterKeys (real kBrowsers)', () => {
   const sampleInput = {
@@ -20,7 +21,7 @@ describe('filterKeys (real kBrowsers)', () => {
   test('includes only firefox-specific keys for firefox', () => {
     const result = filterKeys(sampleInput, 'firefox');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       browser_specific_settings: {
@@ -36,7 +37,7 @@ describe('filterKeys (real kBrowsers)', () => {
   test('includes only chromium-specific keys for chromium', () => {
     const result = filterKeys(sampleInput, 'chromium');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       externally_connectable: {
@@ -50,7 +51,7 @@ describe('filterKeys (real kBrowsers)', () => {
   test('excludes all browser-prefixed keys if prefix is unknown', () => {
     const result = filterKeys(sampleInput, 'opera');
 
-    expect(result).toEqual({
+    assert.deepStrictEqual(result, {
       name: 'My Extension',
       version: '1.0.0',
       'tests:internal_key': 'should not be removed',
