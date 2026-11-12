@@ -91,7 +91,7 @@ jobs:
 
       # Create a new GitHub release with the version tag and attach the built packages
       - name: Create release
-        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
           tag_name: ${{ steps.bump-version.outputs.version }}
           generate_release_notes: true
